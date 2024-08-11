@@ -12,14 +12,13 @@ export interface IAdmin extends Document {
   password?: string;
   status: boolean;
   comparePassword: (password: string) => Promise<boolean>;
-
+  SignAccessToken: () => string;
+  SignRefreshToken: () => string;
 }
 
 const adminSchema: Schema<IAdmin> = new mongoose.Schema(
   {
-    name: {
-      type: String,
-    },
+
 
     email: {
       type: String,
@@ -35,10 +34,6 @@ const adminSchema: Schema<IAdmin> = new mongoose.Schema(
 
     password: {
       type: String,
-    },
-    status: {
-      type: Boolean,
-      default: true,
     },
   },
   {
@@ -58,8 +53,8 @@ adminSchema.pre<IAdmin>("save", async function (next) {
 // sign access token
 adminSchema.methods.SignAccessToken = function () {
   return jwt.sign(
-    { id: this._id, role: this.role },
-    process.env.ACCESS_TOKEN || "",
+    { id: this._id, role: this.role || 'admin' },
+    process.env.ACCESS_TOKEN || "suhail",
     {
       expiresIn: "5m",
     }
@@ -69,8 +64,8 @@ adminSchema.methods.SignAccessToken = function () {
 // sign refresh token
 adminSchema.methods.SignRefreshToken = function () {
   return jwt.sign(
-    { id: this._id, role: this.role },
-    process.env.REFRESH_TOKEN || "",
+    { id: this._id, role: this.role || 'admin' },
+    process.env.REFRESH_TOKEN || "suhail",
     {
       expiresIn: "3d",
     }
@@ -82,5 +77,5 @@ adminSchema.methods.comparePassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const AdminModel: Model<IAdmin> = mongoose.model("Admin", adminSchema);
+const AdminModel: Model<IAdmin> = mongoose.model("admins", adminSchema);
 export default AdminModel;
