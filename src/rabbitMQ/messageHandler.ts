@@ -24,7 +24,7 @@ export default class MessageHandler {
       case 'user-status-reverse':
         response = await controller.userStatus.bind(controller)(data);
         break;
-      case 'get-banners':
+      case 'get-banners': 
         response = await controller.getBanners.bind(controller)();
         break;
       case 'get-coupons':
