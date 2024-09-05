@@ -25,6 +25,7 @@ const couponSchema: Schema<ICoupon> = new mongoose.Schema(
     },
     coupon_code: {
       type: String,
+      unique:true,
     },
     coupon_description: {
       type: String,

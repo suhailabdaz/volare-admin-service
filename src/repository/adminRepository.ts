@@ -56,6 +56,7 @@ export class AdminRepository implements IAdminRepository {
     }
   }
 
+
   async blockBanner(id: string): Promise<IBanner | null> {
     try {
       const banner = await BannerModel.findById(id);
